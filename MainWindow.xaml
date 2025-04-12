@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Label x:Name="lbl_ID" Content="ID" HorizontalAlignment="Left" Margin="400,49,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="tbx_Title" HorizontalAlignment="Left" Margin="400,92,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" Width="255"/>
@@ -15,10 +15,13 @@
         <TextBox x:Name="tbx_Status" HorizontalAlignment="Left" Margin="400,177,0,0" TextWrapping="Wrap" Text="Status" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="tbx_StartDate" HorizontalAlignment="Left" Margin="400,217,0,0" TextWrapping="Wrap" Text="Start Date" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="tbx_LastDate" HorizontalAlignment="Left" Margin="400,260,0,0" TextWrapping="Wrap" Text="Last Date" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btn_Favorite" Content="Favorite" HorizontalAlignment="Left" Margin="400,300,0,0" VerticalAlignment="Top" Width="60"/>
+        <Button x:Name="btn_Favorite" Content="Favorite" HorizontalAlignment="Left" Margin="400,300,0,0" VerticalAlignment="Top" Width="60" Click="btn_Favorite_Click"/>
         <Label x:Name="lbl_Heart" Content="♡" HorizontalAlignment="Left" Margin="465,289,0,0" VerticalAlignment="Top" FontSize="24"/>
-        <Button x:Name="btn_book1" Content="Book 1" HorizontalAlignment="Left" Margin="100,106,0,0" VerticalAlignment="Top" Click="btn_book1_Click"/>
-        <Button x:Name="btn_book2" Content="Book 2" HorizontalAlignment="Left" Margin="200,106,0,0" VerticalAlignment="Top" Click="btn_book2_Click"/>
+        <Button x:Name="btn_book1" Content="Book 1" HorizontalAlignment="Left" Margin="400,24,0,0" VerticalAlignment="Top" Click="btn_book1_Click"/>
+        <Button x:Name="btn_book2" Content="Book 2" HorizontalAlignment="Left" Margin="456,24,0,0" VerticalAlignment="Top" Click="btn_book2_Click"/>
+        <Button x:Name="btn_Add" Content="Add" HorizontalAlignment="Left" Margin="409,357,0,0" VerticalAlignment="Top" Click="btn_Add_Click"/>
+        <Button x:Name="btn_Edit" Content="Edit" HorizontalAlignment="Left" Margin="460,357,0,0" VerticalAlignment="Top" Click="btn_Edit_Click"/>
+        <Button x:Name="btn_Delete" Content="Delete" HorizontalAlignment="Left" Margin="520,357,0,0" VerticalAlignment="Top" Click="btn_Delete_Click"/>
 
     </Grid>
 </Window>

@@ -17,15 +17,10 @@ namespace FileManager
         //sorry in advance for all the parameters
         //but the methods needed to be flexible lol
         //also edit this all u want cuz im not used to using get set
+        //oh also the Record.txt is gpt except for the 1st 2 :P
+        //i got lazy to add :P
 
-        //static string tablePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Tables");
-        //string bookPath = System.IO.Path.Combine(tablePath, "Book.txt");
-        //string recordPath = System.IO.Path.Combine(tablePath, "Record.txt");
-
-        string bookPath = "D:\\Visual Studio\\Visual Studio repos\\FileManager\\Tables\\Book.txt";
         string recordPath = "D:\\Visual Studio\\Visual Studio repos\\FileManager\\Tables\\Record.txt";
-
-        bool addingBook = false; //true = adding, false = editing, deleting; this will be used for appending
 
         public int id;
         public string title;
@@ -60,16 +55,7 @@ namespace FileManager
                 {
                     string[] content = line.Split('|');
 
-                    int id = int.Parse(content[0]);
-                    string title = content[1];
-                    int pageStatus = int.Parse(content[2]);
-                    int pageCount = int.Parse(content[3]);
-                    string readingStatus = content[4];
-                    string startDate = content[5];
-                    string lastDate = content[6];
-                    string fav = content[7];
-
-                    Record record = new Record(id, title, pageStatus, pageCount, readingStatus, startDate, lastDate, fav);
+                    Record record = new Record(int.Parse(content[0]), content[1], int.Parse(content[2]), int.Parse(content[3]), content[4], content[5], content[6], content[7]);
 
                     allRecords.Add(record);
                 }
@@ -83,9 +69,7 @@ namespace FileManager
             foreach (Record record in allRecords)
             {
                 if (inputID == record.id)
-                {
                     return record;
-                }
             }
 
             return null; //null will never be returned
@@ -95,112 +79,79 @@ namespace FileManager
         //the parameters will correspond with content of the record (minus the id and the favorites)
         public void AddRecord(string cont2, string cont3, string cont4, string cont5, string cont6, string cont7)
         {
-            addingBook = true;
+            int newID = GenerateNewID();
 
-            //the book is not favorited? at first
-            string line = $"|{cont2}|{cont3}|{cont4}|{cont5}|{cont6}|{cont7}|-";
+            //the book is not favorited?? at first
+            Record newRecord = new Record(newID, cont2, int.Parse(cont3), int.Parse(cont4), cont5, cont6, cont7, "-");
 
-            SaveFile(line);
+            List<Record> allRecords = GetAllRecords();
+            allRecords.Add(newRecord);
+
+            //not exactly sure how OrderBy works, it's copy/paste from StackOverflow
+            allRecords = allRecords.OrderBy(r => r.id).ToList();
+
+            SaveFile(allRecords);
         }
 
         //method for editing record
         public void EditRecord(int inputID, string cont2, string cont3, string cont4, string cont5, string cont6, string cont7, string cont8)
         {
-            Record record = GetRecord(inputID, GetAllRecords());
+            List<Record> allRecords = GetAllRecords();
+            Record record = GetRecord(inputID, allRecords);
 
-            if (record != null)
-            {
-                string title = cont2;
-                string pageStatus = cont3;
-                string pageCount = cont4;
-                string readingStatus = cont5;
-                string startDate = cont6;
-                string lastDate = cont7;
-                string fav = cont8;
+            record.title = cont2;
+            record.pageStatus = int.Parse(cont3);
+            record.pageCount = int.Parse(cont4);
+            record.readingStatus = cont5;
+            record.startDate = cont6;
+            record.lastDate = cont7;
+            record.fav = cont8;
 
-                string line = $"{inputID}|{cont2}|{cont3}|{cont4}|{cont5}|{cont6}|{cont7}|{cont8}";
-
-                SaveFile(line);
-            }
-            else
-            {
-                MessageBox.Show("Record not found.");
-            }
+            SaveFile(allRecords);
         }
 
         //method for deleting record
         public void DeleteRecord(int inputID)
         {
-            List<string> allRecords = new List<string>();
+            List<Record> allRecords = GetAllRecords();
+            List<Record> filteredRecords = new List<Record>();
 
-            foreach (Record record in GetAllRecords())
+            foreach (Record record in allRecords)
             {
-                if (record.id != inputID)
+                if (record.id == inputID)
                     continue;
 
-                string cont1 = record.id.ToString();
-                string cont2 = record.title;
-                string cont3 = record.pageStatus.ToString();
-                string cont4 = record.pageCount.ToString();
-                string cont5 = record.readingStatus;
-                string cont6 = record.startDate;
-                string cont7 = record.lastDate;
-                string cont8 = record.fav;
-
-                string line = $"{cont1}|{cont2}|{cont3}|{cont4}|{cont5}|{cont6}|{cont7}|{cont8}";
+                filteredRecords.Add(record); // keep the rest
             }
 
-            SaveFile(allRecords);
+            SaveFile(filteredRecords);
         }
 
-        //FIX THIS PART
-        //saves changes to the file
-        private void SaveFile(string line) //line = the record you changed
-        {
-            using (StreamWriter sw = new StreamWriter(recordPath, addingBook))
-            {
-                if (addingBook) //add
-                {
-                    string newID = GenerateNewID();
-                    sw.WriteLine(newID + line);
-                }
-                else //edit
-                {
-                    
-                }
-            }
-
-            MessageBox.Show("Record added successfully!"); //u can remove this if u want
-
-            addingBook = false; //prolly a better way to do this but I'm lazy lol
-        }
-
-        private void SaveFile(List<string> allRecords)
+        private void SaveFile(List<Record> allRecords)
         {
             using (StreamWriter sw = new StreamWriter(recordPath))
             {
-                foreach (string record in allRecords)
+                foreach (Record record in allRecords)
                 {
-                    sw.WriteLine(record);
+                    string line = $"{record.id}|{record.title}|{record.pageStatus}|{record.pageCount}|{record.readingStatus}|{record.startDate}|{record.lastDate}|{record.fav}";
+                    sw.WriteLine(line);
                 }
             }
         }
 
         //in case a record is deleted
-        private string GenerateNewID()
+        private int GenerateNewID()
         {
-            string newID = "0";
-
             List<Record> allRecords = GetAllRecords();
-            int lowestNum = 0;
+            List<int> existingIDs = new List<int>();
 
             foreach (Record record in allRecords)
-            {
-                if (record.id == lowestNum + 1)
-                    lowestNum = record.id;
-            }
+                existingIDs.Add(record.id);
 
-            newID = lowestNum + 1.ToString();
+            int newID = 1;
+
+            while (existingIDs.Contains(newID))
+                newID++;
 
             return newID;
         }
