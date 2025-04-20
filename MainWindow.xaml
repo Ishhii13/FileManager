@@ -5,42 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="54*"/>
-
-            <!-- This is where the list of things appear -->
-            <RowDefinition Height="59*"/>
-        </Grid.RowDefinitions>
-
+        Title="MainWindow" Height="535" Width="850" WindowStartupLocation="CenterScreen">
+    <Grid x:Name="MainGrid">
         <!--Header-->
-        <Canvas Height="140" Margin="0,1,0,107">
-            <Rectangle HorizontalAlignment="Left" Height="100" VerticalAlignment="Center" Width="713" Fill="#FF222222" Canvas.Left="44" Canvas.Top="19"/>
+        <Canvas x:Name="Header" Height="100"  Width="800" Margin="0,2,0,382">
+            <Label Content="Reading List" Canvas.Left="323" Canvas.Top="28" FontSize="25" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </Canvas>
 
         <!--Reading Status Filter-->
-        <Canvas Height="85" Margin="0,138,0,25">
-            <Button Content="All" HorizontalAlignment="Left" Height="33" Margin="59,21,0,0" Grid.Row="1" VerticalAlignment="Top" Width="61" FontSize="15"/>
-            <Line StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeThickness="5" X1="10" Y1="10" X2="65" Y2="10" Stroke="Black" Canvas.Left="52" Canvas.Top="54" Width="69" Height="15" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Canvas x:Name="StatusFilter" Height="85" Margin="0,100,0,284">
+            <Button x:Name="btn_All" Content="All" HorizontalAlignment="Left" Height="33" Grid.Row="1" VerticalAlignment="Top" Width="47" FontSize="15" Canvas.Left="73" Canvas.Top="21" Click="btn_All_Click"/>
+            <Button x:Name="btn_Favorite" Content="Favorite" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="75" FontSize="15" Canvas.Left="127" Canvas.Top="21" Click="btn_Favorite_Click"/>
+            <Button x:Name="btn_Ongoing" Content="Ongoing" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="89" FontSize="15" Canvas.Left="210" Canvas.Top="21" Click="btn_Ongoing_Click"/>
+            <Button x:Name="btn_Completed" Content="Completed" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="108" FontSize="15" Canvas.Left="308" Canvas.Top="21" Click="btn_Completed_Click"/>
+            <Button x:Name="btn_OnHold" Content="On-Hold" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="96" FontSize="15" Canvas.Left="425" Canvas.Top="21" Click="btn_OnHold_Click"/>
+            <Button x:Name="btn_Dropped" Content="Dropped" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="91" FontSize="15" Canvas.Left="529" Canvas.Top="21" Click="btn_Dropped_Click"/>
+            <Button x:Name="btn_PtR" Content="Plan to Read" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="99" FontSize="15" Canvas.Left="629" Canvas.Top="21" Click="btn_PtR_Click"/>
+            
+            <!-- Displays current list-->
+            <Line x:Name="line_Current" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeThickness="5" X1="25" Y1="10" X2="65" Y2="10" Stroke="Black" Canvas.Left="52" Canvas.Top="54"/>
 
-            <Button Content="Favorite" HorizontalAlignment="Left" Height="33" Margin="129,21,0,0" Grid.Row="1" VerticalAlignment="Top" Width="90" FontSize="15"/>
-            <Button Content="Current" HorizontalAlignment="Left" Height="33" Margin="227,21,0,0" Grid.Row="1" VerticalAlignment="Top" Width="89" FontSize="15"/>
-            <Button Content="Completed" HorizontalAlignment="Left" Height="33" Grid.Row="1" VerticalAlignment="Top" Width="108" FontSize="15" Margin="325,21,0,0"/>
-            <Button Content="On Hold" HorizontalAlignment="Left" Height="33" Margin="443,21,0,0" Grid.Row="1" VerticalAlignment="Top" Width="96" FontSize="15"/>
-            <Button Content="Dropped" HorizontalAlignment="Left" Height="33" Margin="548,21,0,0" Grid.Row="1" VerticalAlignment="Top" Width="91" FontSize="15"/>
-            <Button Content="Planning" HorizontalAlignment="Left" Height="33" Margin="647,21,0,0" Grid.Row="1" VerticalAlignment="Top" Width="91" FontSize="15"/>
-        </Canvas>
-        <Rectangle HorizontalAlignment="Center" Height="52" Margin="0,6,0,0" VerticalAlignment="Top" Width="720" Grid.Row="1" Fill="#FF222222"/>
-        <Label Content="List Title" HorizontalAlignment="Center" Margin="0,17,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#F1F1F1F1" FontWeight="Bold" FontSize="15"/>
-
-        <!-- Column Titles -->
-        <Canvas Height ="45" Width="688"  Grid.Row="1" Margin="56,63,56,145">
-            <Label Content="#" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Center" Canvas.Left="15" Canvas.Top="10" FontSize="15"/>
-            <Label Content="Title" Canvas.Left="130" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="15"/>
-            <Label Content="Author" Canvas.Left="305" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="15"/>
-            <Label Content="Progress" Canvas.Left="485" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="15"/>
         </Canvas>
 
+        <Canvas Height="260" Margin="67,203,120,56">
+            <Rectangle Fill="#FF1D1D1D" Width="646" Height="40" Canvas.Left="10" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <ListView x:Name="List" Width="646" MouseDoubleClick="ViewEntry" Height="195" Canvas.Left="10" Canvas.Top="55" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=id}" Header="#" Width="45"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=title}" Header="Title" Width="250"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=pageStatus}" Header="Progress" Width="100"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=startDate}" Header="Date Started" Width="110"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=lastDate}" Header="Date Finished" Width="110"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Label x:Name="ListTitle" Content="List Title" Height="32" Canvas.Left="208" Canvas.Top="14" Width="244" FontWeight="Bold" Foreground="#F1F1F1F1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="15"/>
+        </Canvas>
+        <Canvas Height="75" Width="75" Margin="728,393,47,51">
+            <Button x:Name="btn_Add" Content="+" Height="45" Width="52" Canvas.Left="12" Canvas.Top="15" HorizontalAlignment="Left" VerticalAlignment="Center" Click="btn_Add_Click"/>
+        </Canvas>
     </Grid>
 </Window>

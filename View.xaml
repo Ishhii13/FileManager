@@ -5,22 +5,54 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FileManager"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="AliceBlue">
-        <Label x:Name="lbl_ID" Content="ID" HorizontalAlignment="Left" Margin="400,49,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tbx_Title" HorizontalAlignment="Left" Margin="400,92,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" Width="255"/>
-        <TextBox x:Name="tbx_PageStatus" HorizontalAlignment="Left" Margin="400,132,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="97"/>
-        <TextBox x:Name="tbx_PageCount" HorizontalAlignment="Left" Margin="553,132,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="102"/>
-        <Label Content="/" HorizontalAlignment="Left" Margin="520,128,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tbx_Status" HorizontalAlignment="Left" Margin="400,177,0,0" TextWrapping="Wrap" Text="Status" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="tbx_StartDate" HorizontalAlignment="Left" Margin="400,217,0,0" TextWrapping="Wrap" Text="Start Date" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="tbx_LastDate" HorizontalAlignment="Left" Margin="400,260,0,0" TextWrapping="Wrap" Text="Last Date" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btn_Favorite" Content="Favorite" HorizontalAlignment="Left" Margin="400,300,0,0" VerticalAlignment="Top" Width="60" Click="btn_Favorite_Click"/>
-        <Label x:Name="lbl_Heart" Content="♡" HorizontalAlignment="Left" Margin="465,289,0,0" VerticalAlignment="Top" FontSize="24"/>
-        <Button x:Name="btn_book1" Content="Book 1" HorizontalAlignment="Left" Margin="400,24,0,0" VerticalAlignment="Top" Click="btn_book1_Click"/>
-        <Button x:Name="btn_book2" Content="Book 2" HorizontalAlignment="Left" Margin="456,24,0,0" VerticalAlignment="Top" Click="btn_book2_Click"/>
-        <Button x:Name="btn_Add" Content="Add" HorizontalAlignment="Left" Margin="409,357,0,0" VerticalAlignment="Top" Click="btn_Add_Click"/>
-        <Button x:Name="btn_Edit" Content="Edit" HorizontalAlignment="Left" Margin="460,357,0,0" VerticalAlignment="Top" Click="btn_Edit_Click"/>
-        <Button x:Name="btn_Delete" Content="Delete" HorizontalAlignment="Left" Margin="520,357,0,0" VerticalAlignment="Top" Click="btn_Delete_Click"/>
+             d:DesignHeight="500" d:DesignWidth="800">
+    <Grid Background="#992D2D2D">
+        <Canvas Background="FloralWhite" Width="550" Height="400" Canvas.Left="125" Canvas.Top="50" Margin="125,43,125,57">
+
+            <!-- Book Title-->
+            <Label Content="Book #" Height="26" Canvas.Left="93" Canvas.Top="42" Width="58" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Label x:Name="lbl_ID" Content="ID" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Left="158" Canvas.Top="42" Width="65"/>
+            <TextBox x:Name="tbx_Title" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" Width="372" Canvas.Left="96" Canvas.Top="73" Height="33" VerticalContentAlignment="Center" Padding="5,0,0,0"/>
+            <Button x:Name="lbl_Heart" Content="♡" Height="33" Canvas.Left="60" Canvas.Top="73" Width="28" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20"/>
+
+            <!-- Page Status-->
+            <Label Content="Progress" Height="26" Canvas.Left="323" Canvas.Top="112" Width="84" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <TextBox x:Name="tbx_PageStatus" HorizontalAlignment="Center" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="60" Canvas.Left="323" Canvas.Top="140" Height="26"/>
+            <Label Content="/" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Left="387" Canvas.Top="139"/>
+            <TextBox x:Name="tbx_PageCount" HorizontalAlignment="Center" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="60" Canvas.Left="407" Canvas.Top="140" Height="26"/>
+
+            <!-- Reading Status-->
+            <Label Content="Reading Status" Height="26" Canvas.Left="93" Canvas.Top="113" Width="98" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <ComboBox x:Name="tbx_Status" HorizontalAlignment="Center" VerticalAlignment="Top" Width="157" Canvas.Left="96" Canvas.Top="141" Height="25"/>
+
+            <!-- Date Started-->
+            <Label Content="Date Started" Height="26" Canvas.Left="93" Canvas.Top="178" Width="98" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Label Content="Month" Height="16" Canvas.Left="98" Canvas.Top="205" Width="46" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="0,0,0,0"/>
+            <Label Content="Day" Height="16" Canvas.Left="166" Canvas.Top="205" Width="24" Padding="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Label Content="Year" Height="16" Canvas.Left="222" Canvas.Top="205" Width="24" Padding="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <TextBox x:Name="tbx_SD_Month" HorizontalAlignment="Center" TextWrapping="Wrap" Text="MM" VerticalAlignment="Top" Width="47" Canvas.Left="98" Canvas.Top="226" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <TextBox x:Name="tbx_SD_Day" TextWrapping="Wrap" Text="DD" Width="38" Canvas.Left="163" Canvas.Top="226" HorizontalAlignment="Center" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <TextBox x:Name="tbx_SD_Year" TextWrapping="Wrap" Text="YYYY" Width="51" Canvas.Left="220" Canvas.Top="226" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Button x:Name="btn_SD_Today" Content="Set Today" Height="19" Canvas.Left="301" Canvas.Top="226" Width="69" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Button x:Name="btn_SD_Unkown" Content="Date Unknown" Height="19" Canvas.Left="382" Canvas.Top="226" Width="90" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+            <!-- Date Finished-->
+            <Label Content="Date Finished" Height="26" Canvas.Left="93" Canvas.Top="254" Width="98" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Label Content="Month" Height="16" Canvas.Left="98" Canvas.Top="279" Width="46" Padding="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Label Content="Day" Height="16" Canvas.Left="166" Canvas.Top="279" Width="24" Padding="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Label Content="Year" Height="16" Canvas.Left="222" Canvas.Top="279" Width="24" Padding="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <TextBox x:Name="tbx_LD_Month" TextWrapping="Wrap" Text="MM" Width="47" Canvas.Left="98" Canvas.Top="300" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <TextBox x:Name="tbx_LD_Day" TextWrapping="Wrap" Text="DD" Width="38" Canvas.Left="163" Canvas.Top="300" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <TextBox x:Name="tbx_LD_Year" TextWrapping="Wrap" Text="YYYY" Width="51" Canvas.Left="220" Canvas.Top="300" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Button x:Name="btn_LD_Today" Content="Set Today" Height="19" Canvas.Left="301" Canvas.Top="300" Width="69" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Button x:Name="btn_LD_Unknown" Content="Date Unknown" Height="19" Canvas.Left="382" Canvas.Top="300" Width="90" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+
+            <!-- Extra Buttons-->
+            <Button x:Name="btn_Edit" Content="Edit" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btn_Edit_Click" Canvas.Left="234" Canvas.Top="342" Height="27" Width="33"/>
+            <Button x:Name="btn_Delete" Content="Delete" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btn_Delete_Click" Canvas.Left="287" Canvas.Top="342" Height="27" Width="52"/>
+            <Button x:Name="btn_Exit" Content="X" Height="26" Canvas.Left="494" Canvas.Top="22" Width="34" FontSize="15" Padding="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Click="Exit_Click"/>
+
+        </Canvas>
     </Grid>
 </UserControl>

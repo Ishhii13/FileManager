@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace FileManager
 {
@@ -20,37 +21,51 @@ namespace FileManager
     /// </summary>
     public partial class View : UserControl
     {
-        public View()
+        MainWindow main;
+        Record current;
+        string mode;
+
+        //constructor for current entries
+        public View(Record selectedBook, MainWindow manWin)
         {
             InitializeComponent();
+            current = selectedBook;
+            main = manWin;
+
+            mode = "Edit";
+            btn_Edit.Content = "Edit";
+            btn_Delete.Content = "Cancel";
+
+            AddStatusList();
+            UpdateTextBoxesForRecord(current);
+        }
+
+        //constructor for new entries
+        public View(MainWindow manWin)
+        {
+            InitializeComponent();
+            current = new Record("", 0, 0, "", "--/--/----", "--/--/----");
+            main = manWin;
+
+            mode = "Add";
+            btn_Edit.Content = "Add";
+            btn_Delete.Content = "Cancel";
+
+            AddStatusList();
+            UpdateTextBoxesForRecord(current);
         }
 
         //EXAMPLE USE CASES FOR THE METHODS
-        private void UpdateTextBoxesForRecord(int recordID)
+        private void UpdateTextBoxesForRecord(Record record)
         {
-            Record temp = new Record(0, "", 0, 0, "", "", "", "");
-
-            List<Record> allRecords = temp.GetAllRecords();
-            Record record = temp.GetRecord(recordID, allRecords);
-
             lbl_ID.Content = record.id.ToString();
             tbx_Title.Text = record.title;
             tbx_PageStatus.Text = record.pageStatus.ToString();
             tbx_PageCount.Text = record.pageCount.ToString();
-            tbx_Status.Text = record.readingStatus;
-            tbx_StartDate.Text = record.startDate;
-            tbx_LastDate.Text = record.lastDate;
+            tbx_Status.SelectedValue = record.readingStatus;
+            SeparateDate(record.startDate,tbx_SD_Month, tbx_SD_Day, tbx_SD_Year);
+            SeparateDate(record.lastDate, tbx_LD_Month, tbx_LD_Day, tbx_LD_Year);
             lbl_Heart.Foreground = record.fav == "+" ? Brushes.Red : Brushes.Black;
-        }
-
-        private void btn_book1_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateTextBoxesForRecord(1);
-        }
-
-        private void btn_book2_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateTextBoxesForRecord(2);
         }
 
         private void btn_Favorite_Click(object sender, RoutedEventArgs e)
@@ -58,8 +73,8 @@ namespace FileManager
             Record temp = new Record(0, "", 0, 0, "", "", "", "");
 
             int id = int.Parse(lbl_ID.Content.ToString());
-            List<Record> allRecords = temp.GetAllRecords();
-            Record record = temp.GetRecord(id, allRecords);
+            List<Record> allRecords = FileManage.GetAllRecords();
+            Record record = FileManage.GetRecord(id, allRecords);
 
             record.fav = record.fav == "-" ? "+" : "-";
 
@@ -68,49 +83,66 @@ namespace FileManager
             temp.EditRecord(record.id, record.title, record.pageStatus.ToString(), record.pageCount.ToString(), record.readingStatus, record.startDate, record.lastDate, record.fav);
         }
 
-        private void btn_Add_Click(object sender, RoutedEventArgs e)
-        {
-            Record temp = new Record(0, "", 0, 0, "", "", "", "");
-
-            string title = tbx_Title.Text;
-            string pageStatus = tbx_PageStatus.Text;
-            string pageCount = tbx_PageCount.Text;
-            string readingStatus = tbx_Status.Text;
-            string startDate = tbx_StartDate.Text;
-            string lastDate = tbx_LastDate.Text;
-
-            temp.AddRecord(title, pageStatus, pageCount, readingStatus, startDate, lastDate);
-
-            MessageBox.Show("Record added.");
-        }
-
         private void btn_Edit_Click(object sender, RoutedEventArgs e)
         {
-            Record temp = new Record(0, "", 0, 0, "", "", "", "");
-
             int id = int.Parse(lbl_ID.Content.ToString());
             string title = tbx_Title.Text;
             string pageStatus = tbx_PageStatus.Text;
             string pageCount = tbx_PageCount.Text;
-            string readingStatus = tbx_Status.Text;
-            string startDate = tbx_StartDate.Text;
-            string lastDate = tbx_LastDate.Text;
+            string readingStatus = tbx_Status.SelectedItem.ToString();
+            string startDate = MergeDate(tbx_SD_Month, tbx_SD_Day, tbx_SD_Year);
+            string lastDate = MergeDate(tbx_SD_Month, tbx_SD_Day, tbx_SD_Year);
             string fav = lbl_Heart.Content.ToString();
 
-            temp.EditRecord(id, title, pageStatus, pageCount, readingStatus, startDate, lastDate, fav);
+            //EDIT MODE
 
-            MessageBox.Show("Record edited.");
+            if (mode == "Edit")
+            {
+                MessageBoxResult result = MessageBox.Show("Save changes made to the entry?", "Save Changes",MessageBoxButton.OKCancel);
+
+                if (result == MessageBoxResult.OK)
+                {
+                    current.EditRecord(id, title, pageStatus,pageCount,readingStatus,startDate,lastDate,fav);
+                    MessageBox.Show("Record edited.");
+
+                    main.RefreshPage();
+                    main.MainGrid.Children.Remove(this);
+                }
+            }
+
+            //ADD MODE
+
+            else if (mode == "Add")
+            {
+                MessageBoxResult result = MessageBox.Show("Add the entry to the list?", "Add Entry", MessageBoxButton.OKCancel);
+
+                if (result == MessageBoxResult.OK)
+                {
+                    current.AddRecord(current);
+                    MessageBox.Show("Record added.");
+
+                    main.RefreshPage();
+                    main.MainGrid.Children.Remove(this);
+                }
+            }
+
         }
 
         private void btn_Delete_Click(object sender, RoutedEventArgs e)
         {
-            Record temp = new Record(0, "", 0, 0, "", "", "", "");
-            int id = int.Parse(lbl_ID.Content.ToString());
+            MessageBoxResult result = MessageBox.Show("Delete the entry? This action cannot be undone", "Delete", MessageBoxButton.OKCancel);
 
-            temp.DeleteRecord(id);
+            if (result == MessageBoxResult.Yes)
+            {
+                Record temp = new Record(0, "", 0, 0, "", "", "", "");
+                int id = int.Parse(lbl_ID.Content.ToString());
 
-            MessageBox.Show("Record deleted.");
-            ClearUI();
+                temp.DeleteRecord(id);
+
+                MessageBox.Show("Record deleted.");
+                main.MainGrid.Children.Remove(this);
+            }
+            
         }
 
         //Extra methods u can use
@@ -165,9 +197,37 @@ namespace FileManager
             tbx_PageStatus.Text = "";
             tbx_PageCount.Text = "";
             tbx_Status.Text = "";
-            tbx_StartDate.Text = "";
-            tbx_LastDate.Text = "";
             lbl_Heart.Content = "♡";
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            main.MainGrid.Children.Remove(this);
+        }
+
+        private void AddStatusList()
+        {
+            tbx_Status.Items.Add("");
+            tbx_Status.Items.Add("Ongoing");
+            tbx_Status.Items.Add("Completed");
+            tbx_Status.Items.Add("On-Hold");
+            tbx_Status.Items.Add("Dropped");
+            tbx_Status.Items.Add("Plan to Read");
+        }
+
+        private void SeparateDate(string date, TextBox month, TextBox day, TextBox year)
+        {
+            string[] part = date.Split('/');
+
+            month.Text = part[0];
+            day.Text = part[1];
+            year.Text = part[2];
+        }
+
+        private string MergeDate(TextBox month, TextBox day, TextBox year)
+        {
+            string updatedDate = $"{month.Text}/{day.Text}/{year.Text}";
+            return updatedDate;
         }
     }
 }
