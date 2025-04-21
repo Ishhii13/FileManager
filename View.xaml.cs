@@ -34,9 +34,10 @@ namespace FileManager
 
             mode = "Edit";
             btn_Edit.Content = "Edit";
-            btn_Delete.Content = "Cancel";
+            btn_Delete.Content = "Delete";
 
             AddStatusList();
+            ToggleEdit(false);
             UpdateTextBoxesForRecord(current);
         }
 
@@ -45,6 +46,7 @@ namespace FileManager
         {
             InitializeComponent();
             current = new Record("", 0, 0, "", "--/--/----", "--/--/----");
+            current.AddRecord(current);
             main = manWin;
 
             mode = "Add";
@@ -52,6 +54,7 @@ namespace FileManager
             btn_Delete.Content = "Cancel";
 
             AddStatusList();
+            ToggleEdit(true);
             UpdateTextBoxesForRecord(current);
         }
 
@@ -68,45 +71,34 @@ namespace FileManager
             lbl_Heart.Foreground = record.fav == "+" ? Brushes.Red : Brushes.Black;
         }
 
-        private void btn_Favorite_Click(object sender, RoutedEventArgs e)
-        {
-            Record temp = new Record(0, "", 0, 0, "", "", "", "");
-
-            int id = int.Parse(lbl_ID.Content.ToString());
-            List<Record> allRecords = FileManage.GetAllRecords();
-            Record record = FileManage.GetRecord(id, allRecords);
-
-            record.fav = record.fav == "-" ? "+" : "-";
-
-            lbl_Heart.Foreground = record.fav == "+" ? Brushes.Red : Brushes.Black;
-
-            temp.EditRecord(record.id, record.title, record.pageStatus.ToString(), record.pageCount.ToString(), record.readingStatus, record.startDate, record.lastDate, record.fav);
-        }
-
         private void btn_Edit_Click(object sender, RoutedEventArgs e)
         {
-            int id = int.Parse(lbl_ID.Content.ToString());
-            string title = tbx_Title.Text;
-            string pageStatus = tbx_PageStatus.Text;
-            string pageCount = tbx_PageCount.Text;
-            string readingStatus = tbx_Status.SelectedItem.ToString();
-            string startDate = MergeDate(tbx_SD_Month, tbx_SD_Day, tbx_SD_Year);
-            string lastDate = MergeDate(tbx_SD_Month, tbx_SD_Day, tbx_SD_Year);
-            string fav = lbl_Heart.Content.ToString();
+            Button btn = sender as Button;
 
             //EDIT MODE
 
             if (mode == "Edit")
             {
-                MessageBoxResult result = MessageBox.Show("Save changes made to the entry?", "Save Changes",MessageBoxButton.OKCancel);
-
-                if (result == MessageBoxResult.OK)
+                if (btn.Content.ToString() == "Edit")
                 {
-                    current.EditRecord(id, title, pageStatus,pageCount,readingStatus,startDate,lastDate,fav);
-                    MessageBox.Show("Record edited.");
+                    btn_Edit.Content = "Save";
+                    btn_Delete.Content = "Cancel";
 
-                    main.RefreshPage();
-                    main.MainGrid.Children.Remove(this);
+                    ToggleEdit(true);
+                }
+
+                else if (btn.Content.ToString() == "Save")
+                {
+                    MessageBoxResult result = MessageBox.Show("Save changes made to the entry?", "Save Changes", MessageBoxButton.OKCancel);
+
+                    if (result == MessageBoxResult.OK)
+                    {
+                        TransferContentToRecord();
+                        MessageBox.Show("Record edited.");
+
+                        main.RefreshPage();
+                        main.MainGrid.Children.Remove(this);
+                    }
                 }
             }
 
@@ -118,7 +110,7 @@ namespace FileManager
 
                 if (result == MessageBoxResult.OK)
                 {
-                    current.AddRecord(current);
+                    TransferContentToRecord();
                     MessageBox.Show("Record added.");
 
                     main.RefreshPage();
@@ -130,78 +122,55 @@ namespace FileManager
 
         private void btn_Delete_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Delete the entry? This action cannot be undone", "Delete", MessageBoxButton.OKCancel);
+            Button btn = sender as Button;
 
-            if (result == MessageBoxResult.Yes)
+            if (btn.Content.ToString() == "Delete")
             {
-                Record temp = new Record(0, "", 0, 0, "", "", "", "");
-                int id = int.Parse(lbl_ID.Content.ToString());
+                MessageBoxResult result = MessageBox.Show("Delete the entry? This action cannot be undone", "Delete", MessageBoxButton.OKCancel);
 
-                temp.DeleteRecord(id);
+                if (result == MessageBoxResult.OK)
+                {
+                    CancelRecord();
+                    MessageBox.Show("Record deleted.");
 
-                MessageBox.Show("Record deleted.");
-                main.MainGrid.Children.Remove(this);
+                    main.RefreshPage();
+                    main.MainGrid.Children.Remove(this);
+                }
+            }
+
+            else if (btn.Content.ToString() == "Cancel")
+            {
+                MessageBoxResult result = MessageBox.Show("Discard the changes made?", "Cancel Changes", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    MessageBox.Show("Canceled changes.");
+
+                    if (mode == "Edit")
+                    {
+                        UpdateTextBoxesForRecord(current);
+                        ToggleEdit(false);
+
+                        btn_Edit.Content = "Edit";
+                        btn_Delete.Content = "Delete";
+                    }
+
+                    else if(mode == "Add")
+                    {
+                        CancelRecord();
+                        main.MainGrid.Children.Remove(this);
+                    }
+                }
             }
             
         }
 
-        //Extra methods u can use
-
-        //the status parameter should relate to the xaml
-        //like if u use a button like in MAL for the statuses
-        //write the method like GetGenreCountByStatus(btn.Content.ToString(),...)
-        private Dictionary<string, int> GetGenreCountByStatus(string status, List<Record> records, List<Book> books)
-        {
-            Dictionary<string, int> genreCount = new Dictionary<string, int>();
-
-            Dictionary<string, Book> bookByGenre = new Dictionary<string, Book>();
-            foreach (Book book in books)
-                bookByGenre.Add(book.title, book);
-
-            foreach (Record record in records)
-            {
-                if (record.readingStatus == status)
-                {
-                    Book recordedBook = bookByGenre[record.title];
-
-                    foreach (string genre in recordedBook.genres)
-                    {
-                        if (genreCount.ContainsKey(genre))
-                            genreCount[genre]++;
-                        else
-                            genreCount[genre] = 1;
-                    }
-                }
-            }
-
-            return genreCount;
-        }
-
-        private int PagesByTime(DateTime startDate, DateTime endDate, List<Record> records)
-        {
-            int pageCount = 0;
-
-            foreach (Record record in records)
-            {
-                if (DateTime.Parse(record.startDate) < startDate && (DateTime.Parse(record.lastDate) < endDate))
-                    pageCount += record.pageCount;
-            }
-
-            return pageCount;
-        }
-
-        private void ClearUI()
-        {
-            lbl_ID.Content = "";
-            tbx_Title.Text = "";
-            tbx_PageStatus.Text = "";
-            tbx_PageCount.Text = "";
-            tbx_Status.Text = "";
-            lbl_Heart.Content = "♡";
-        }
-
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
+            if (mode == "Add")
+            {
+                CancelRecord();
+            }
             main.MainGrid.Children.Remove(this);
         }
 
@@ -213,6 +182,20 @@ namespace FileManager
             tbx_Status.Items.Add("On-Hold");
             tbx_Status.Items.Add("Dropped");
             tbx_Status.Items.Add("Plan to Read");
+        }
+
+        private void TransferContentToRecord()
+        {
+            int id = int.Parse(lbl_ID.Content.ToString());
+            string title = tbx_Title.Text;
+            string pageStatus = tbx_PageStatus.Text;
+            string pageCount = tbx_PageCount.Text;
+            string readingStatus = tbx_Status.SelectedItem.ToString();
+            string startDate = MergeDate(tbx_SD_Month, tbx_SD_Day, tbx_SD_Year);
+            string lastDate = MergeDate(tbx_LD_Month, tbx_LD_Day, tbx_LD_Year);
+            string fav = lbl_Heart.Content.ToString();
+
+            current.EditRecord(id, title, pageStatus, pageCount, readingStatus, startDate, lastDate, fav);
         }
 
         private void SeparateDate(string date, TextBox month, TextBox day, TextBox year)
@@ -228,6 +211,82 @@ namespace FileManager
         {
             string updatedDate = $"{month.Text}/{day.Text}/{year.Text}";
             return updatedDate;
+        }
+
+        private void lbl_Heart_Click(object sender, RoutedEventArgs e)
+        {
+            current.fav = current.fav == "-" ? "+" : "-";
+            lbl_Heart.Foreground = current.fav == "+" ? Brushes.Red : Brushes.Black;
+
+            current.EditRecord(current.id, current.title, current.pageStatus.ToString(), current.pageCount.ToString(), current.readingStatus, current.startDate, current.lastDate, current.fav);
+        }
+
+        private void TodayDate(object sender, RoutedEventArgs e)
+        { 
+            string today = DateTime.Today.ToString("MM/dd/yyyy");
+            
+            if (sender is Button btn)
+            {
+                SetDate(btn, today, true);
+            }
+        }
+
+        private void ToggleEdit(bool set)
+        {
+            tbx_Title.IsEnabled = set;
+            tbx_Status.IsEnabled = set;
+            tbx_PageStatus.IsEnabled = set;
+            tbx_PageCount.IsEnabled = set;
+
+            btn_SD_Today.IsEnabled = set;
+            btn_SD_Unknown.IsEnabled = set;
+            tbx_SD_Month.IsEnabled = set;
+            tbx_SD_Day.IsEnabled = set;
+            tbx_SD_Year.IsEnabled = set;
+
+            btn_LD_Today.IsEnabled = set;
+            btn_LD_Unknown.IsEnabled = set;
+            tbx_LD_Month.IsEnabled = set;
+            tbx_LD_Day.IsEnabled = set;
+            tbx_LD_Year.IsEnabled = set;
+        }
+
+        private void UnknownDate(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn)
+            {
+                if (btn.Content.ToString() == "Set Date")
+                {
+                    SetDate(btn, "--/--/----", true);
+                }
+                else if (btn.Content.ToString() == "Date Unknown")
+                {
+                    SetDate(btn, "--/--/----", false);
+                }
+            }
+        }
+
+        private void SetDate(Button btn, string date, bool set)
+        {
+            if (btn.Name == "btn_SD_Unknown" || btn.Name == "btn_SD_Today")
+            {
+                SeparateDate(date, tbx_SD_Month, tbx_SD_Day, tbx_SD_Year);
+                tbx_SD_Month.IsEnabled = set; tbx_SD_Day.IsEnabled = set; tbx_SD_Year.IsEnabled = set;
+            }
+
+            else if (btn.Name == "btn_LD_Unknown" || btn.Name == "btn_LD_Today")
+            {
+                SeparateDate(date, tbx_LD_Month, tbx_LD_Day, tbx_LD_Year);
+                tbx_LD_Month.IsEnabled = set; tbx_LD_Day.IsEnabled = set; tbx_LD_Year.IsEnabled = set;
+            }
+        }
+
+        private void CancelRecord()
+        {
+            Record temp = new Record(0, "", 0, 0, "", "", "", "");
+            int id = int.Parse(lbl_ID.Content.ToString());
+
+            temp.DeleteRecord(id);
         }
     }
 }

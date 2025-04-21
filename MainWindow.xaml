@@ -6,6 +6,15 @@
         xmlns:local="clr-namespace:FileManager"
         mc:Ignorable="d"
         Title="MainWindow" Height="535" Width="850" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Design.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Grid x:Name="MainGrid">
         <!--Header-->
         <Canvas x:Name="Header" Height="100"  Width="800" Margin="0,2,0,382">
@@ -14,21 +23,21 @@
 
         <!--Reading Status Filter-->
         <Canvas x:Name="StatusFilter" Height="85" Margin="0,100,0,284">
-            <Button x:Name="btn_All" Content="All" HorizontalAlignment="Left" Height="33" Grid.Row="1" VerticalAlignment="Top" Width="47" FontSize="15" Canvas.Left="73" Canvas.Top="21" Click="btn_All_Click"/>
-            <Button x:Name="btn_Favorite" Content="Favorite" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="75" FontSize="15" Canvas.Left="127" Canvas.Top="21" Click="btn_Favorite_Click"/>
-            <Button x:Name="btn_Ongoing" Content="Ongoing" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="89" FontSize="15" Canvas.Left="210" Canvas.Top="21" Click="btn_Ongoing_Click"/>
-            <Button x:Name="btn_Completed" Content="Completed" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="108" FontSize="15" Canvas.Left="308" Canvas.Top="21" Click="btn_Completed_Click"/>
-            <Button x:Name="btn_OnHold" Content="On-Hold" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="96" FontSize="15" Canvas.Left="425" Canvas.Top="21" Click="btn_OnHold_Click"/>
-            <Button x:Name="btn_Dropped" Content="Dropped" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="91" FontSize="15" Canvas.Left="529" Canvas.Top="21" Click="btn_Dropped_Click"/>
-            <Button x:Name="btn_PtR" Content="Plan to Read" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="99" FontSize="15" Canvas.Left="629" Canvas.Top="21" Click="btn_PtR_Click"/>
+            <Button Style="{StaticResource StatusBTN}" x:Name="btn_All" Content="All" HorizontalAlignment="Left" Height="33" Grid.Row="1" VerticalAlignment="Top" Width="47" FontSize="15" Canvas.Left="73" Canvas.Top="21" Click="btn_All_Click"/>
+            <Button Style="{StaticResource StatusBTN}" x:Name="btn_Favorite" Content="Favorite" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="75" FontSize="15" Canvas.Left="127" Canvas.Top="21" Click="btn_Favorite_Click"/>
+            <Button Style="{StaticResource StatusBTN}" x:Name="btn_Ongoing" Content="Ongoing" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="89" FontSize="15" Canvas.Left="210" Canvas.Top="21" Click="btn_Ongoing_Click"/>
+            <Button Style="{StaticResource StatusBTN}" x:Name="btn_Completed" Content="Completed" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="108" FontSize="15" Canvas.Left="308" Canvas.Top="21" Click="btn_Completed_Click"/>
+            <Button Style="{StaticResource StatusBTN}" x:Name="btn_OnHold" Content="On-Hold" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="96" FontSize="15" Canvas.Left="425" Canvas.Top="21" Click="btn_OnHold_Click"/>
+            <Button Style="{StaticResource StatusBTN}" x:Name="btn_Dropped" Content="Dropped" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="91" FontSize="15" Canvas.Left="529" Canvas.Top="21" Click="btn_Dropped_Click"/>
+            <Button Style="{StaticResource StatusBTN}" x:Name="btn_PtR" Content="Plan to Read" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="99" FontSize="15" Canvas.Left="629" Canvas.Top="21" Click="btn_PtR_Click"/>
             
             <!-- Displays current list-->
-            <Line x:Name="line_Current" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeThickness="5" X1="25" Y1="10" X2="65" Y2="10" Stroke="Black" Canvas.Left="52" Canvas.Top="54"/>
+            <Line x:Name="line_Current" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeThickness="5" X1="25" Y1="10" X2="65" Y2="10" Stroke="SeaGreen" Canvas.Left="52" Canvas.Top="54" />
 
         </Canvas>
 
         <Canvas Height="260" Margin="67,203,120,56">
-            <Rectangle Fill="#FF1D1D1D" Width="646" Height="40" Canvas.Left="10" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Rectangle Fill="SeaGreen" Width="646" Height="40" Canvas.Left="10" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <ListView x:Name="List" Width="646" MouseDoubleClick="ViewEntry" Height="195" Canvas.Left="10" Canvas.Top="55" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <ListView.View>
                     <GridView>
@@ -43,7 +52,7 @@
             <Label x:Name="ListTitle" Content="List Title" Height="32" Canvas.Left="208" Canvas.Top="14" Width="244" FontWeight="Bold" Foreground="#F1F1F1F1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="15"/>
         </Canvas>
         <Canvas Height="75" Width="75" Margin="728,393,47,51">
-            <Button x:Name="btn_Add" Content="+" Height="45" Width="52" Canvas.Left="12" Canvas.Top="15" HorizontalAlignment="Left" VerticalAlignment="Center" Click="btn_Add_Click"/>
+            <Button Style="{StaticResource GeneralBTN}" x:Name="btn_Add" Content="+" Height="45" Width="52" Canvas.Left="12" Canvas.Top="15" HorizontalAlignment="Left" VerticalAlignment="Center" Click="btn_Add_Click" FontSize="25" Padding="0,0,0,0" VerticalContentAlignment="Stretch"/>
         </Canvas>
     </Grid>
 </Window>

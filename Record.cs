@@ -63,7 +63,6 @@ namespace FileManager
 
             //not exactly sure how OrderBy works, it's copy/paste from StackOverflow
             allRecords = allRecords.OrderBy(r => r.id).ToList();
-
             FileManage.SaveFile(allRecords);
         }
 

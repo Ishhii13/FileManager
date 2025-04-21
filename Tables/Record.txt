@@ -1,8 +1,8 @@
 1|Banana|13|100|Ongoing|04/06/2025|04/07/2025|-
-2|Erin is a Dummy Head|9|95|Ongoing|04/02/2025|04/02/2025|♡
+2|Erin is a Dummy Head|9|95|Ongoing|04/02/2025|04/02/2025|-
 3|Crimson Dawn|45|300|Completed|01/01/2025|03/15/2025|+
 4|The Lost City|0|220|Plan to Read|01/01/2025|03/15/2025|-
-5|Fuzzy Logic|32|250|Ongoing|03/22/2025|04/06/2025|+
+5|Fuzzy Logics|32|250|Ongoing|03/22/2025|04/06/2025|♡
 6|Under the Cherry Moon|100|100|Completed|02/10/2025|02/15/2025|-
 7|Null & Void|50|200|Dropped|03/01/2025|03/20/2025|-
 8|Techno Thriller|80|400|On-Hold|01/20/2025|02/20/2025|+
@@ -12,3 +12,5 @@
 12|Quietude|70|180|Dropped|01/15/2025|02/10/2025|-
 13|I Am in Japain|33|55|Ongoing|04/10/2025|4/12/2025|-
 14|This is The Title|341|444|Ongoing|04/11/2025|4/12/2025|-
+15||0|0||04/20/2025|--/--/----|♡
+16|The Secrets Series|9032|9033|Completed|12/19/2094|04/21/2025|♡
