@@ -110,20 +110,17 @@ namespace FileManager
             ChangeLineLocation(line_Current, 25, 65);
             ListTitle.Content = "All";
         }
-
         //methods that change the elements and such
         private void ChangeLineLocation(Line line, int x1, int x2)
         {
             line.X1 = x1; line.X2 = x2;
             line.Y1 = 10; line.Y2 = 10;
         }
-
         private void UpdateList(List<Record> booklist)
         {
             List.ItemsSource = null;
             List.ItemsSource = booklist;
         }
-
         private List<Button> GatherBTN()
         { 
             List<Button> btns = new List<Button>();
@@ -138,7 +135,6 @@ namespace FileManager
 
             return btns;
         }
-
         private void CurrentFilter(Button currentBTN)
         { 
             foreach(Button btn in buttons)

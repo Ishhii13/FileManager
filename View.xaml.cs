@@ -45,7 +45,7 @@ namespace FileManager
         public View(MainWindow manWin)
         {
             InitializeComponent();
-            current = new Record("", 0, 0, "", "--/--/----", "--/--/----");
+            current = new Record("Book Title", 0, 0, "", "--/--/----", "--/--/----");
             current.AddRecord(current);
             main = manWin;
 

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="535" Width="850" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="535" Width="850" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -18,7 +18,11 @@
     <Grid x:Name="MainGrid">
         <!--Header-->
         <Canvas x:Name="Header" Height="100"  Width="800" Margin="0,2,0,382">
-            <Label Content="Reading List" Canvas.Left="323" Canvas.Top="28" FontSize="25" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Canvas.Background>
+                <ImageBrush ImageSource="pack://application:,,,/background.png" Stretch="UniformToFill"/>
+            </Canvas.Background>
+            <Rectangle Fill="#59000000" Width="800" Height="100"/>
+            <Label Content="Reading List" Canvas.Left="323" Canvas.Top="28" FontSize="25" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#F1F1F1F1"/>
         </Canvas>
 
         <!--Reading Status Filter-->
