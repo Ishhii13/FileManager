@@ -49,6 +49,7 @@ namespace FileManager
             current.AddRecord(current);
             main = manWin;
 
+
             mode = "Add";
             btn_Edit.Content = "Add";
             btn_Delete.Content = "Cancel";
