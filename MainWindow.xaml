@@ -26,6 +26,7 @@
         </Canvas>
 
         <!--Reading Status Filter-->
+        
         <Canvas x:Name="StatusFilter" Height="85" Margin="0,100,0,284">
             <Button Style="{StaticResource StatusBTN}" x:Name="btn_All" Content="All" HorizontalAlignment="Left" Height="33" Grid.Row="1" VerticalAlignment="Top" Width="47" FontSize="15" Canvas.Left="73" Canvas.Top="21" Click="btn_All_Click"/>
             <Button Style="{StaticResource StatusBTN}" x:Name="btn_Favorite" Content="Favorite" HorizontalAlignment="Left" Height="33" VerticalAlignment="Center" Width="75" FontSize="15" Canvas.Left="127" Canvas.Top="21" Click="btn_Favorite_Click"/>
